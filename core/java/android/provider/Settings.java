@@ -14437,6 +14437,12 @@ public final class Settings {
          * The content:// style URL for global secure settings items.  Not public.
          */
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/global");
+        
+       /**
+         * Whether to force LTE carrier aggregation. Suffixed with "_<phoneId>".
+         * @hide
+         */
+        public static final String FORCE_LTE_CA = "force_lte_ca";
 
         /**
          * Whether the notification bubbles are globally enabled
