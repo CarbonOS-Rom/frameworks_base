@@ -343,6 +343,7 @@ public class ServiceState implements Parcelable {
     private String mOperatorAlphaShortRaw;
     private boolean mIsDataRoamingFromRegistration;
     private boolean mIsIwlanPreferred;
+    private Boolean mForceLteCA = null;
 
     /**
      * get String description of roaming type
@@ -425,6 +426,7 @@ public class ServiceState implements Parcelable {
         mOperatorAlphaShortRaw = s.mOperatorAlphaShortRaw;
         mIsDataRoamingFromRegistration = s.mIsDataRoamingFromRegistration;
         mIsIwlanPreferred = s.mIsIwlanPreferred;
+        mForceLteCA = s.mForceLteCA;
     }
 
     /**
@@ -454,6 +456,8 @@ public class ServiceState implements Parcelable {
         mOperatorAlphaShortRaw = in.readString();
         mIsDataRoamingFromRegistration = in.readBoolean();
         mIsIwlanPreferred = in.readBoolean();
+        int forceLteCa = in.readInt();
+        mForceLteCA = forceLteCa == -1 ? null : forceLteCa != 0;
     }
 
     public void writeToParcel(Parcel out, int flags) {
@@ -477,6 +481,7 @@ public class ServiceState implements Parcelable {
         out.writeString(mOperatorAlphaShortRaw);
         out.writeBoolean(mIsDataRoamingFromRegistration);
         out.writeBoolean(mIsIwlanPreferred);
+        out.writeInt(mForceLteCA == null ? -1 : (mForceLteCA ? 1 : 0));
     }
 
     public int describeContents() {
@@ -927,7 +932,8 @@ public class ServiceState implements Parcelable {
                     mOperatorAlphaLongRaw,
                     mOperatorAlphaShortRaw,
                     mIsDataRoamingFromRegistration,
-                    mIsIwlanPreferred);
+                    mIsIwlanPreferred,
+                    mForceLteCA);
         }
     }
 
@@ -953,7 +959,8 @@ public class ServiceState implements Parcelable {
                     && mNetworkRegistrationInfos.containsAll(s.mNetworkRegistrationInfos)
                     && mNrFrequencyRange == s.mNrFrequencyRange
                     && mIsDataRoamingFromRegistration == s.mIsDataRoamingFromRegistration
-                    && mIsIwlanPreferred == s.mIsIwlanPreferred;
+                    && mIsIwlanPreferred == s.mIsIwlanPreferred
+                    && Objects.equals(mForceLteCA, s.mForceLteCA);
         }
     }
 
@@ -2076,6 +2083,23 @@ public class ServiceState implements Parcelable {
     public boolean isIwlanPreferred() {
         return mIsIwlanPreferred;
     }
+    
+       /**
+     * @return whether LTE carrier aggregation is forced, or {@code null} if unset.
+     * @hide
+     */
+    @Nullable
+    public Boolean getForceLteCA() {
+        return mForceLteCA;
+    }
+
+    /**
+     * @param forceLteCA whether to force LTE carrier aggregation, or {@code null} to unset.
+     * @hide
+     */
+    public void setForceLteCA(@Nullable Boolean forceLteCA) {
+        mForceLteCA = forceLteCA;
+    } 
 
     /**
      * This indicates whether the device is searching for service.
