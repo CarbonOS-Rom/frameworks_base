@@ -25,8 +25,7 @@ class FingerprintInteractiveToAuthGoogleProviderImpl
         get() = settings.boolSetting(Settings.Secure.SFPS_PERFORMANT_AUTH_ENABLED, defaultSettingValue)
 
     override fun getVendorExtension(userId: Int): AuthenticateReason.Vendor {
-        val setting = Settings.Secure.getIntForUser(context.contentResolver,
-            Settings.Secure.SFPS_PERFORMANT_AUTH_ENABLED, if (defaultSettingValue) 1 else 0, userId)
+        val setting = getSetting(userId)
 
         Log.d(TAG, "getVendorExtension, userId: $userId, SFPS_PERFORMANT_AUTH_ENABLED: $setting")
 
@@ -37,4 +36,13 @@ class FingerprintInteractiveToAuthGoogleProviderImpl
             })
         }
     }
+
+    override fun isEnabled(userId: Int): Boolean {
+        // setting can be -1 in some cases, which should be treated same as 0
+        return getSetting(userId) > 0
+    }
+
+    private fun getSetting(userId: Int): Int =
+        Settings.Secure.getIntForUser(context.contentResolver,
+            Settings.Secure.SFPS_PERFORMANT_AUTH_ENABLED, if (defaultSettingValue) 1 else 0, userId)
 }
