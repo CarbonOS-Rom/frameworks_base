@@ -26,7 +26,6 @@ import com.android.systemui.CoreStartable
 import com.android.systemui.biometrics.AuthController
 import com.android.systemui.biometrics.EllipseOverlapDetectorParams
 import com.android.systemui.biometrics.FingerprintInteractiveToAuthProvider
-import com.android.systemui.biometrics.FingerprintInteractiveToAuthProviderImpl
 import com.android.systemui.biometrics.FingerprintInteractiveToAuthGoogleProviderImpl
 import com.android.systemui.biometrics.UdfpsUtils
 import com.android.systemui.biometrics.data.repository.BiometricStatusRepository
@@ -163,19 +162,6 @@ interface BiometricsModule {
             }
         }
 
-        @Provides
-        fun providesFingerprintInteractiveToAuth(
-            @Background backgroundDispatcher: CoroutineDispatcher,
-            context: Context,
-            secureSettings: SecureSettings,
-            selectedUserInteractor: SelectedUserInteractor,
-        ): FingerprintInteractiveToAuthProvider =
-            FingerprintInteractiveToAuthProviderImpl(
-                backgroundDispatcher,
-                context,
-                secureSettings,
-                selectedUserInteractor,
-            )
     }
 }
 
